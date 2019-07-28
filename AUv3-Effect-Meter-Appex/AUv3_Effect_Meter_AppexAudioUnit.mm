@@ -53,20 +53,17 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
     // Initialize a default format for the busses.
     AVAudioFormat *defaultFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:44100.0 channels:2];
     
-    // Create a DSP kernel to handle the signal processing.
-    _kernel.init(defaultFormat.channelCount, defaultFormat.sampleRate);
-    
     // Create parameter objects.
     AUParameter *levelParameter = [AUParameterTree createParameterWithIdentifier:@"level"
-                                                                    name:@"Level"
-                                                                 address:LEVEL_PARAMETER_ADDRESS
-                                                                     min:0
-                                                                     max:100
-                                                                    unit:kAudioUnitParameterUnit_Percent
-                                                                unitName:nil
-                                                                   flags:0
-                                                            valueStrings:nil
-                                                     dependentParameters:nil];
+                                                                            name:@"Level"
+                                                                         address:LEVEL_PARAMETER_ADDRESS
+                                                                             min:0
+                                                                             max:100
+                                                                            unit:kAudioUnitParameterUnit_Percent
+                                                                        unitName:nil
+                                                                           flags:0
+                                                                    valueStrings:nil
+                                                             dependentParameters:nil];
     
     // Initialize the parameter values.
     levelParameter.value = 0.0;
@@ -91,7 +88,8 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
     };
     
     // A function to provide string representations of parameter values.
-    _parameterTree.implementorStringFromValueCallback = ^(AUParameter *param, const AUValue *__nullable valuePtr) {
+    _parameterTree.implementorStringFromValueCallback = ^(AUParameter *param,
+                                                          const AUValue *__nullable valuePtr) {
         AUValue value = valuePtr == nil ? param.value : *valuePtr;
         
         switch (param.address) {
@@ -153,7 +151,7 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
     
     _inputBus.allocateRenderResources(self.maximumFramesToRender);
     
-    _kernel.init(self.outputBus.format.channelCount, self.outputBus.format.sampleRate);
+    _kernel.init(self);
     
     return YES;
 }
@@ -198,11 +196,11 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
         
         // If passed null output buffer pointers, process in-place in the input buffer.
         AudioBufferList *outAudioBufferList = outputData;
-        if (outAudioBufferList->mBuffers[0].mData == nullptr) {
+       // if (outAudioBufferList->mBuffers[0].mData == nullptr) {
             for (UInt32 i = 0; i < outAudioBufferList->mNumberBuffers; ++i) {
                 outAudioBufferList->mBuffers[i].mData = inAudioBufferList->mBuffers[i].mData;
             }
-        }
+        //}
         
         state->setBuffers(inAudioBufferList, outAudioBufferList);
         state->processWithEvents(timestamp, frameCount, realtimeEventListHead);

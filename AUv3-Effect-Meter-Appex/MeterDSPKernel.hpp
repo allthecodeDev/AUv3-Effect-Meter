@@ -10,6 +10,7 @@
 #define MeterDSPKernel_h
 
 #import "DSPKernel.hpp"
+#import "AUv3_Effect_Meter_AppexAudioUnit.h"
 #import <CoreAudio/CoreAudioTypes.h>
 #import <vector>
 #import <memory>
@@ -40,10 +41,22 @@ public:
     
     ///////////////////////////////////////////////////////////////////////
     
-    void init(int channelCount, double inSampleRate) {
+    void init(AUv3_Effect_Meter_AppexAudioUnit* unit) {
         
-        sampleRate = float(inSampleRate);
-        qtyChannels = channelCount;
+        audioUnit = unit;
+        sampleRate =  audioUnit.outputBusses[0].format.sampleRate;
+        qtyChannels = audioUnit.outputBusses[0].format.channelCount;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////
+    
+    void setParameter(AUParameterAddress address, AUValue value) {
+        switch (address) {
+            case LEVEL_PARAMETER:
+                levelValue = value;
+                [[audioUnit.parameterTree parameterWithAddress: address] setValue:value];
+                break;
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////
@@ -52,7 +65,6 @@ public:
         switch (address) {
             case LEVEL_PARAMETER:
                 // Return the goal. It is not thread safe to return the ramping value.
-                //return (cutoffRamper.getUIValue() * nyquist);
                 return levelValue;
         }
         return 0.0;
@@ -70,19 +82,9 @@ public:
     void process(AUAudioFrameCount frameCount, AUAudioFrameCount bufferOffset){
         
         float* leftChannelLevel = (float*)inBufferListPtr->mBuffers[0].mData;
-        levelValue = *leftChannelLevel;
-        
-        for (int frameIndex = 0; frameIndex < frameCount; ++frameIndex) {
-            
-            int frameOffset = int(frameIndex + bufferOffset);
-            
-            for (int channel = 0; channel < qtyChannels; ++channel) {
-                float* in  = (float*)inBufferListPtr->mBuffers[channel].mData  + frameOffset;
-                float* out = (float*)outBufferListPtr->mBuffers[channel].mData + frameOffset;
-                
-                out = in;
-            }
-        }
+        //[this setParameter([audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER_ADDRESS], *leftChannelLevel)];
+        //levelValue = *leftChannelLevel;
+        [[audioUnit.parameterTree parameterWithAddress: LEVEL_PARAMETER_ADDRESS] setValue: *leftChannelLevel];
     }
     
     ///////////////////////////////////////////////////////////////////////
@@ -103,6 +105,7 @@ private:
     AudioBufferList* outBufferListPtr = nullptr;
     
     AUValue levelValue = 0.0;
+    AUv3_Effect_Meter_AppexAudioUnit* audioUnit;
 };
 
 #endif /* MeterDSPKernel_h */

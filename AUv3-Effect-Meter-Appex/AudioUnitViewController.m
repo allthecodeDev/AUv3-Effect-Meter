@@ -38,22 +38,14 @@
     if (!audioUnit) {
         return;
     }
-    
-    // Get the parameter tree and add observers for any parameters that the UI needs to keep in sync with the AudioUnit
-    _levelParameter = [audioUnit.parameterTree parameterWithAddress: LEVEL_PARAMETER_ADDRESS];
-    
-    [self addObserver:audioUnit
-           forKeyPath:@"allParameterValues"
-              options:NSKeyValueObservingOptionNew
-              context:_parameterObserverToken];
 }
 
 ///////////////////////////////////////////////////////////////////////
 
 -(void) viewDidDisappear {
     
-    [self removeObserver:audioUnit
-              forKeyPath:@"allParameterValues"];
+    [audioUnit removeObserver:self
+                   forKeyPath:@"allParameterValues"];
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -61,6 +53,13 @@
 - (AUAudioUnit *)createAudioUnitWithComponentDescription:(AudioComponentDescription)desc error:(NSError **)error {
     audioUnit = [[AUv3_Effect_Meter_AppexAudioUnit alloc] initWithComponentDescription:desc error:error];
 
+    // Get the parameter tree and add observers for any parameters that the UI needs to keep in sync with the AudioUnit
+    _levelParameter = [audioUnit.parameterTree parameterWithAddress: LEVEL_PARAMETER_ADDRESS];
+    
+    [audioUnit addObserver:self
+                forKeyPath:@"allParameterValues"
+                   options:NSKeyValueObservingOptionNew
+                   context:_parameterObserverToken]; 
     
     return audioUnit;
 }
@@ -75,6 +74,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         self->_level = [self->audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER_ADDRESS].value;
+        NSLog(@"level = %f",self->_level);
         if(self->_level < 0.25)
         {
             self.view.layer.backgroundColor = NSColor.blueColor.CGColor;

@@ -30,13 +30,13 @@
 			<array>
 				<dict>
 					<key>description</key>
-					<string>AUv3-Effect-Meter-Appex</string>
+					<string>AUv3-Effect-Meter</string>
 					<key>factoryFunction</key>
 					<string>AudioUnitViewController</string>
 					<key>manufacturer</key>
 					<string>CRLS</string>
 					<key>name</key>
-					<string>Carlsound: AUv3-Effect-Meter-Appex</string>
+					<string>Carlsound: AUv3-Effect-Meter</string>
 					<key>sandboxSafe</key>
 					<true/>
 					<key>subtype</key>

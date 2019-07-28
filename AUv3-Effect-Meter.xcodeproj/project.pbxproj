@@ -1,0 +1,617 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		899886B822ECD8AD005A2705 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 899886B722ECD8AD005A2705 /* AppDelegate.m */; };
+		899886BA22ECD8AF005A2705 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 899886B922ECD8AF005A2705 /* Assets.xcassets */; };
+		899886BD22ECD8AF005A2705 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 899886BB22ECD8AF005A2705 /* MainMenu.xib */; };
+		899886C022ECD8AF005A2705 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 899886BF22ECD8AF005A2705 /* main.m */; };
+		899886CF22ECD954005A2705 /* AUv3_Effect_Meter_AppexAudioUnit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 899886CE22ECD954005A2705 /* AUv3_Effect_Meter_AppexAudioUnit.mm */; };
+		899886D222ECD954005A2705 /* AudioUnitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 899886D122ECD954005A2705 /* AudioUnitViewController.m */; };
+		899886D522ECD954005A2705 /* AudioUnitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 899886D322ECD954005A2705 /* AudioUnitViewController.xib */; };
+		899886DA22ECD954005A2705 /* AUv3-Effect-Meter-Appex.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 899886CB22ECD954005A2705 /* AUv3-Effect-Meter-Appex.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		899886EE22ECFC48005A2705 /* DSPKernel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 899886EC22ECFC48005A2705 /* DSPKernel.mm */; };
+		899886F222ED24E8005A2705 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 899886F122ED24E8005A2705 /* AVFoundation.framework */; };
+		899886F422ED24EF005A2705 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 899886F322ED24EF005A2705 /* AudioToolbox.framework */; };
+		899886F622ED24FA005A2705 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 899886F522ED24FA005A2705 /* AudioUnit.framework */; };
+		899886F822ED2501005A2705 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 899886F722ED2501005A2705 /* AVKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		899886D822ECD954005A2705 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 899886AB22ECD8AD005A2705 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 899886CA22ECD954005A2705;
+			remoteInfo = "AUv3-Effect-Meter-Appex";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		899886DE22ECD954005A2705 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				899886DA22ECD954005A2705 /* AUv3-Effect-Meter-Appex.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		899886B322ECD8AD005A2705 /* AUv3-Effect-Meter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AUv3-Effect-Meter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		899886B622ECD8AD005A2705 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		899886B722ECD8AD005A2705 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		899886B922ECD8AF005A2705 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		899886BC22ECD8AF005A2705 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		899886BE22ECD8AF005A2705 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		899886BF22ECD8AF005A2705 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		899886C122ECD8AF005A2705 /* AUv3_Effect_Meter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AUv3_Effect_Meter.entitlements; sourceTree = "<group>"; };
+		899886CB22ECD954005A2705 /* AUv3-Effect-Meter-Appex.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "AUv3-Effect-Meter-Appex.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		899886CD22ECD954005A2705 /* AUv3_Effect_Meter_AppexAudioUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AUv3_Effect_Meter_AppexAudioUnit.h; sourceTree = "<group>"; };
+		899886CE22ECD954005A2705 /* AUv3_Effect_Meter_AppexAudioUnit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AUv3_Effect_Meter_AppexAudioUnit.mm; sourceTree = "<group>"; };
+		899886D022ECD954005A2705 /* AudioUnitViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioUnitViewController.h; sourceTree = "<group>"; };
+		899886D122ECD954005A2705 /* AudioUnitViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioUnitViewController.m; sourceTree = "<group>"; };
+		899886D422ECD954005A2705 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AudioUnitViewController.xib; sourceTree = "<group>"; };
+		899886D622ECD954005A2705 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		899886D722ECD954005A2705 /* AUv3_Effect_Meter_Appex.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AUv3_Effect_Meter_Appex.entitlements; sourceTree = "<group>"; };
+		899886EB22ECFC48005A2705 /* BufferedAudioBus.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BufferedAudioBus.hpp; sourceTree = "<group>"; };
+		899886EC22ECFC48005A2705 /* DSPKernel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DSPKernel.mm; sourceTree = "<group>"; };
+		899886ED22ECFC48005A2705 /* DSPKernel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DSPKernel.hpp; sourceTree = "<group>"; };
+		899886EF22ECFE24005A2705 /* MeterDSPKernel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeterDSPKernel.hpp; sourceTree = "<group>"; };
+		899886F122ED24E8005A2705 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		899886F322ED24EF005A2705 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		899886F522ED24FA005A2705 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		899886F722ED2501005A2705 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		899886B022ECD8AD005A2705 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899886C822ECD954005A2705 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				899886F822ED2501005A2705 /* AVKit.framework in Frameworks */,
+				899886F622ED24FA005A2705 /* AudioUnit.framework in Frameworks */,
+				899886F422ED24EF005A2705 /* AudioToolbox.framework in Frameworks */,
+				899886F222ED24E8005A2705 /* AVFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		899886AA22ECD8AD005A2705 = {
+			isa = PBXGroup;
+			children = (
+				899886B522ECD8AD005A2705 /* AUv3-Effect-Meter */,
+				899886CC22ECD954005A2705 /* AUv3-Effect-Meter-Appex */,
+				899886B422ECD8AD005A2705 /* Products */,
+				899886F022ED24E8005A2705 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		899886B422ECD8AD005A2705 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				899886B322ECD8AD005A2705 /* AUv3-Effect-Meter.app */,
+				899886CB22ECD954005A2705 /* AUv3-Effect-Meter-Appex.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		899886B522ECD8AD005A2705 /* AUv3-Effect-Meter */ = {
+			isa = PBXGroup;
+			children = (
+				899886E922ECDAE6005A2705 /* Model */,
+				899886E822ECDADE005A2705 /* View */,
+				899886E722ECDAD4005A2705 /* Controller */,
+				899886E622ECDACB005A2705 /* Property List */,
+				899886E522ECDAC1005A2705 /* Entitlements */,
+				899886EA22ECDB06005A2705 /* Assets */,
+			);
+			path = "AUv3-Effect-Meter";
+			sourceTree = "<group>";
+		};
+		899886CC22ECD954005A2705 /* AUv3-Effect-Meter-Appex */ = {
+			isa = PBXGroup;
+			children = (
+				899886DF22ECDA22005A2705 /* Model */,
+				899886E022ECDA32005A2705 /* View */,
+				899886E122ECDA3C005A2705 /* Controller */,
+				899886E222ECDA49005A2705 /* Property List */,
+				899886E322ECDA53005A2705 /* Entitlements */,
+			);
+			path = "AUv3-Effect-Meter-Appex";
+			sourceTree = "<group>";
+		};
+		899886DF22ECDA22005A2705 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				899886E422ECDA87005A2705 /* libraries */,
+				899886CD22ECD954005A2705 /* AUv3_Effect_Meter_AppexAudioUnit.h */,
+				899886CE22ECD954005A2705 /* AUv3_Effect_Meter_AppexAudioUnit.mm */,
+				899886EF22ECFE24005A2705 /* MeterDSPKernel.hpp */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		899886E022ECDA32005A2705 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				899886D322ECD954005A2705 /* AudioUnitViewController.xib */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		899886E122ECDA3C005A2705 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				899886D022ECD954005A2705 /* AudioUnitViewController.h */,
+				899886D122ECD954005A2705 /* AudioUnitViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		899886E222ECDA49005A2705 /* Property List */ = {
+			isa = PBXGroup;
+			children = (
+				899886D622ECD954005A2705 /* Info.plist */,
+			);
+			name = "Property List";
+			sourceTree = "<group>";
+		};
+		899886E322ECDA53005A2705 /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				899886D722ECD954005A2705 /* AUv3_Effect_Meter_Appex.entitlements */,
+			);
+			name = Entitlements;
+			sourceTree = "<group>";
+		};
+		899886E422ECDA87005A2705 /* libraries */ = {
+			isa = PBXGroup;
+			children = (
+				899886EB22ECFC48005A2705 /* BufferedAudioBus.hpp */,
+				899886ED22ECFC48005A2705 /* DSPKernel.hpp */,
+				899886EC22ECFC48005A2705 /* DSPKernel.mm */,
+			);
+			name = libraries;
+			sourceTree = "<group>";
+		};
+		899886E522ECDAC1005A2705 /* Entitlements */ = {
+			isa = PBXGroup;
+			children = (
+				899886C122ECD8AF005A2705 /* AUv3_Effect_Meter.entitlements */,
+			);
+			name = Entitlements;
+			sourceTree = "<group>";
+		};
+		899886E622ECDACB005A2705 /* Property List */ = {
+			isa = PBXGroup;
+			children = (
+				899886BE22ECD8AF005A2705 /* Info.plist */,
+			);
+			name = "Property List";
+			sourceTree = "<group>";
+		};
+		899886E722ECDAD4005A2705 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		899886E822ECDADE005A2705 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				899886BB22ECD8AF005A2705 /* MainMenu.xib */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		899886E922ECDAE6005A2705 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				899886B622ECD8AD005A2705 /* AppDelegate.h */,
+				899886B722ECD8AD005A2705 /* AppDelegate.m */,
+				899886BF22ECD8AF005A2705 /* main.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		899886EA22ECDB06005A2705 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				899886B922ECD8AF005A2705 /* Assets.xcassets */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		899886F022ED24E8005A2705 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				899886F722ED2501005A2705 /* AVKit.framework */,
+				899886F522ED24FA005A2705 /* AudioUnit.framework */,
+				899886F322ED24EF005A2705 /* AudioToolbox.framework */,
+				899886F122ED24E8005A2705 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		899886B222ECD8AD005A2705 /* AUv3-Effect-Meter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 899886C422ECD8AF005A2705 /* Build configuration list for PBXNativeTarget "AUv3-Effect-Meter" */;
+			buildPhases = (
+				899886AF22ECD8AD005A2705 /* Sources */,
+				899886B022ECD8AD005A2705 /* Frameworks */,
+				899886B122ECD8AD005A2705 /* Resources */,
+				899886DE22ECD954005A2705 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				899886D922ECD954005A2705 /* PBXTargetDependency */,
+			);
+			name = "AUv3-Effect-Meter";
+			productName = "AUv3-Effect-Meter";
+			productReference = 899886B322ECD8AD005A2705 /* AUv3-Effect-Meter.app */;
+			productType = "com.apple.product-type.application";
+		};
+		899886CA22ECD954005A2705 /* AUv3-Effect-Meter-Appex */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 899886DD22ECD954005A2705 /* Build configuration list for PBXNativeTarget "AUv3-Effect-Meter-Appex" */;
+			buildPhases = (
+				899886C722ECD954005A2705 /* Sources */,
+				899886C822ECD954005A2705 /* Frameworks */,
+				899886C922ECD954005A2705 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AUv3-Effect-Meter-Appex";
+			productName = "AUv3-Effect-Meter-Appex";
+			productReference = 899886CB22ECD954005A2705 /* AUv3-Effect-Meter-Appex.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		899886AB22ECD8AD005A2705 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1030;
+				ORGANIZATIONNAME = "John Carlson";
+				TargetAttributes = {
+					899886B222ECD8AD005A2705 = {
+						CreatedOnToolsVersion = 10.3;
+					};
+					899886CA22ECD954005A2705 = {
+						CreatedOnToolsVersion = 10.3;
+					};
+				};
+			};
+			buildConfigurationList = 899886AE22ECD8AD005A2705 /* Build configuration list for PBXProject "AUv3-Effect-Meter" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 899886AA22ECD8AD005A2705;
+			productRefGroup = 899886B422ECD8AD005A2705 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				899886B222ECD8AD005A2705 /* AUv3-Effect-Meter */,
+				899886CA22ECD954005A2705 /* AUv3-Effect-Meter-Appex */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		899886B122ECD8AD005A2705 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				899886BA22ECD8AF005A2705 /* Assets.xcassets in Resources */,
+				899886BD22ECD8AF005A2705 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899886C922ECD954005A2705 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				899886D522ECD954005A2705 /* AudioUnitViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		899886AF22ECD8AD005A2705 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				899886C022ECD8AF005A2705 /* main.m in Sources */,
+				899886B822ECD8AD005A2705 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		899886C722ECD954005A2705 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				899886EE22ECFC48005A2705 /* DSPKernel.mm in Sources */,
+				899886CF22ECD954005A2705 /* AUv3_Effect_Meter_AppexAudioUnit.mm in Sources */,
+				899886D222ECD954005A2705 /* AudioUnitViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		899886D922ECD954005A2705 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 899886CA22ECD954005A2705 /* AUv3-Effect-Meter-Appex */;
+			targetProxy = 899886D822ECD954005A2705 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		899886BB22ECD8AF005A2705 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				899886BC22ECD8AF005A2705 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		899886D322ECD954005A2705 /* AudioUnitViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				899886D422ECD954005A2705 /* Base */,
+			);
+			name = AudioUnitViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		899886C222ECD8AF005A2705 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		899886C322ECD8AF005A2705 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		899886C522ECD8AF005A2705 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "AUv3-Effect-Meter/AUv3_Effect_Meter.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = P8SEUM7VKM;
+				INFOPLIST_FILE = "AUv3-Effect-Meter/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "net.carlsound.AUv3-Effect-Meter";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		899886C622ECD8AF005A2705 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "AUv3-Effect-Meter/AUv3_Effect_Meter.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = P8SEUM7VKM;
+				INFOPLIST_FILE = "AUv3-Effect-Meter/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "net.carlsound.AUv3-Effect-Meter";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		899886DB22ECD954005A2705 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "AUv3-Effect-Meter-Appex/AUv3_Effect_Meter_Appex.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = P8SEUM7VKM;
+				INFOPLIST_FILE = "AUv3-Effect-Meter-Appex/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "net.carlsound.AUv3-Effect-Meter.AUv3-Effect-Meter-Appex";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		899886DC22ECD954005A2705 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "AUv3-Effect-Meter-Appex/AUv3_Effect_Meter_Appex.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = P8SEUM7VKM;
+				INFOPLIST_FILE = "AUv3-Effect-Meter-Appex/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "net.carlsound.AUv3-Effect-Meter.AUv3-Effect-Meter-Appex";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		899886AE22ECD8AD005A2705 /* Build configuration list for PBXProject "AUv3-Effect-Meter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				899886C222ECD8AF005A2705 /* Debug */,
+				899886C322ECD8AF005A2705 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		899886C422ECD8AF005A2705 /* Build configuration list for PBXNativeTarget "AUv3-Effect-Meter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				899886C522ECD8AF005A2705 /* Debug */,
+				899886C622ECD8AF005A2705 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		899886DD22ECD954005A2705 /* Build configuration list for PBXNativeTarget "AUv3-Effect-Meter-Appex" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				899886DB22ECD954005A2705 /* Debug */,
+				899886DC22ECD954005A2705 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 899886AB22ECD8AD005A2705 /* Project object */;
+}

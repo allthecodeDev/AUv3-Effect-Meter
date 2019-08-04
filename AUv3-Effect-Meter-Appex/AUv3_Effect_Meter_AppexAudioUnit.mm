@@ -82,6 +82,11 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
     // Make a local pointer to the kernel to avoid capturing self.
     __block MeterDSPKernel *meterKernel = &_kernel;
     
+    // call back when a parameter is updated extenally
+    _parameterTree.implementorValueObserver = ^(AUParameter * _Nonnull param, AUValue value) {
+        meterKernel->setParameter(param.address, value);
+    };
+    
     // implementorValueProvider is called when the value needs to be refreshed.
     _parameterTree.implementorValueProvider = ^(AUParameter *param) {
         return meterKernel->getParameter(param.address);

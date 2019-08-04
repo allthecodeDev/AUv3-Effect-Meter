@@ -16,6 +16,8 @@
     AUParameter* _levelParameter;
     AUValue _level;
     AUParameterObserverToken _parameterObserverToken;
+    
+    __weak IBOutlet NSTextField *volumeLabel;
 }
 
 @end
@@ -45,7 +47,7 @@
 -(void) viewDidDisappear {
     
     [audioUnit removeObserver:self
-                   forKeyPath:@"allParameterValues"];
+                   forKeyPath:@"level"];
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -56,8 +58,41 @@
     // Get the parameter tree and add observers for any parameters that the UI needs to keep in sync with the AudioUnit
     _levelParameter = [audioUnit.parameterTree parameterWithAddress: LEVEL_PARAMETER_ADDRESS];
     
+    [_levelParameter tokenByAddingParameterObserver:^(AUParameterAddress address, AUValue value) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self->_level = [self->audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER_ADDRESS].value;
+            NSLog(@"level = %f ",self->_level);
+            
+            self->volumeLabel.stringValue = [NSString stringWithFormat:@"%0.02f",self->_level];
+            
+            /*
+            if(self->_level < 0.25)
+            {
+                self.view.layer.backgroundColor = NSColor.blueColor.CGColor;
+            }
+            else if(self->_level < 0.5)
+            {
+                self.view.layer.backgroundColor = NSColor.greenColor.CGColor;
+            }
+            else if(self->_level < 0.75)
+            {
+                self.view.layer.backgroundColor = NSColor.yellowColor.CGColor;
+            }
+            else if(self->_level < 0.9)
+            {
+                self.view.layer.backgroundColor = NSColor.orangeColor.CGColor;
+            }
+            else
+            {
+                self.view.layer.backgroundColor = NSColor.redColor.CGColor;
+            }
+             */
+        });
+    }];
+    
     [audioUnit addObserver:self
-                forKeyPath:@"allParameterValues"
+                forKeyPath:@"level"
                    options:NSKeyValueObservingOptionNew
                    context:_parameterObserverToken]; 
     
@@ -71,10 +106,14 @@
                         change:(NSDictionary<NSString *, id> *)change
                        context:(void *)context
 {
+    /*
     dispatch_async(dispatch_get_main_queue(), ^{
         
         self->_level = [self->audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER_ADDRESS].value;
-        NSLog(@"level = %f",self->_level);
+        NSLog(@"level = %f ",self->_level);
+        
+        self->volumeLabel.stringValue = [NSString stringWithFormat:@"%0.02f",self->_level];
+        
         if(self->_level < 0.25)
         {
             self.view.layer.backgroundColor = NSColor.blueColor.CGColor;
@@ -95,7 +134,7 @@
         {
             self.view.layer.backgroundColor = NSColor.redColor.CGColor;
         }
-    });
+    });*/
 }
 
 ///////////////////////////////////////////////////////////////////////

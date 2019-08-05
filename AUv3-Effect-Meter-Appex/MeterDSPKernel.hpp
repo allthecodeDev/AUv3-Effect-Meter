@@ -81,10 +81,32 @@ public:
     
     void process(AUAudioFrameCount frameCount, AUAudioFrameCount bufferOffset){
         
-        float* leftChannelLevel = (float*)inBufferListPtr->mBuffers[0].mData;
-        //[this setParameter([audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER_ADDRESS], *leftChannelLevel)];
-        //levelValue = *leftChannelLevel;
-        [[audioUnit.parameterTree parameterWithAddress: LEVEL_PARAMETER_ADDRESS] setValue: *leftChannelLevel];
+        //https://developer.apple.com/documentation/audiotoolbox/auhostmusicalcontextblock?language=objc
+        
+        audioUnit.musicalContextBlock = ^BOOL(double * _Nullable currentTempo,
+                                              double * _Nullable timeSignatureNumerator,
+                                              NSInteger * _Nullable timeSignatureDenominator,
+                                              double * _Nullable currentBeatPosition,
+                                              NSInteger * _Nullable sampleOffsetToNextBeat,
+                                              double * _Nullable currentMeasureDownbeatPosition) {
+            
+            //TODO: get downbeat position and provide set level parameter value on downbeat only
+            if(*sampleOffsetToNextBeat < frameCount){
+                
+                float* leftChannelLevel = (float*)inBufferListPtr->mBuffers[*sampleOffsetToNextBeat].mData;
+                
+                [[audioUnit.parameterTree parameterWithAddress: LEVEL_PARAMETER_ADDRESS] setValue: *leftChannelLevel];
+            }
+            
+            if(currentTempo){
+                return YES;
+            }
+            else{
+                return NO;
+            }
+        };
+        
+        
     }
     
     ///////////////////////////////////////////////////////////////////////

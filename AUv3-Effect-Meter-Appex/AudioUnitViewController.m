@@ -46,8 +46,12 @@
 
 -(void) viewDidDisappear {
     
+    /*
     [audioUnit removeObserver:self
                    forKeyPath:@"level"];
+     */
+    
+    [_levelParameter removeParameterObserver:_parameterObserverToken];
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -55,16 +59,18 @@
 - (AUAudioUnit *)createAudioUnitWithComponentDescription:(AudioComponentDescription)desc error:(NSError **)error {
     audioUnit = [[AUv3_Effect_Meter_AppexAudioUnit alloc] initWithComponentDescription:desc error:error];
 
+    
     // Get the parameter tree and add observers for any parameters that the UI needs to keep in sync with the AudioUnit
     _levelParameter = [audioUnit.parameterTree parameterWithAddress: LEVEL_PARAMETER_ADDRESS];
     
-    [_levelParameter tokenByAddingParameterObserver:^(AUParameterAddress address, AUValue value) {
+    
+    _parameterObserverToken = [_levelParameter tokenByAddingParameterObserver:^(AUParameterAddress address, AUValue value) {
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            self->_level = [self->audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER_ADDRESS].value;
+            self->_level = self->_levelParameter.value;
             NSLog(@"level = %f ",self->_level);
             
-            self->volumeLabel.stringValue = [NSString stringWithFormat:@"%0.02f",self->_level];
+            //self->volumeLabel.stringValue = [NSString stringWithFormat:@"%0.02f",self->_level];
             
             /*
             if(self->_level < 0.25)
@@ -91,10 +97,12 @@
         });
     }];
     
+    /*
     [audioUnit addObserver:self
                 forKeyPath:@"level"
                    options:NSKeyValueObservingOptionNew
-                   context:_parameterObserverToken]; 
+                   context:_parameterObserverToken];
+     */
     
     return audioUnit;
 }

@@ -50,11 +50,30 @@ public:
     
     ///////////////////////////////////////////////////////////////////////
     
+    void setTempo(double tempo){
+        currentTempo = tempo;
+    }
+    
+    void setCurrentBeatPosition(double beatPosition){
+        currentBeatPosition = beatPosition;
+    }
+    
+    void setSampleOffsetToNextBeat(NSInteger offsetToNextBeatPosition){
+        sampleOffsetToNextBeat = offsetToNextBeatPosition;
+    }
+    
+    void setCurrentMeasureDownbeatPosition(double downbeatPosition){
+        currentMeasureDownbeatPosition = downbeatPosition;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////
+    
     void setParameter(AUParameterAddress address, AUValue value) {
         switch (address) {
             case LEVEL_PARAMETER:
                 levelValue = value;
-                [[audioUnit.parameterTree parameterWithAddress: address] setValue:value];
+                [audioUnit.parameterTree.children[LEVEL_PARAMETER] setValue:[NSNumber numberWithFloat:value] forKey:@"level"];
+                //[[audioUnit.parameterTree parameterWithAddress: address] setValue:value];
                 break;
         }
     }
@@ -73,7 +92,7 @@ public:
     ///////////////////////////////////////////////////////////////////////
     
     void setBuffers(AudioBufferList* inBufferList, AudioBufferList* outBufferList) {
-        inBufferListPtr = inBufferList;
+         inBufferListPtr = inBufferList;
         outBufferListPtr = outBufferList;
     }
     
@@ -81,7 +100,25 @@ public:
     
     void process(AUAudioFrameCount frameCount, AUAudioFrameCount bufferOffset){
         
-        //https://developer.apple.com/documentation/audiotoolbox/auhostmusicalcontextblock?language=objc
+        /*
+        double tempoValue = 1.0;
+        double* tempo = &tempoValue;
+        
+        double timeSigNumeratorValue = 4.0;
+        double* timeSigNumerator = &timeSigNumeratorValue;
+        
+        NSInteger timeSigDenominatorValue = 4.0;
+        NSInteger* timeSigDenominator = &timeSigDenominatorValue;
+        
+        double currentPositionValue = 0.0;
+        double* currentPosition = &currentPositionValue;
+        
+        NSInteger offsetToNextBeatValue = 0;
+        NSInteger* offsetToNextBeat = &offsetToNextBeatValue;
+        
+        double currentDownbeatPositionValue = 0.0;
+        double* currentDownbeatPosition = &currentDownbeatPositionValue;
+    //https://developer.apple.com/documentation/audiotoolbox/auhostmusicalcontextblock?language=objc
         
         audioUnit.musicalContextBlock = ^BOOL(double * _Nullable currentTempo,
                                               double * _Nullable timeSignatureNumerator,
@@ -106,7 +143,38 @@ public:
             }
         };
         
+        audioUnit.musicalContextBlock(tempo,
+                                      timeSigNumerator,
+                                      timeSigDenominator,
+                                      currentPosition,
+                                      offsetToNextBeat,
+                                      currentDownbeatPosition);
+         */
         
+        if(sampleOffsetToNextBeat < frameCount){
+            
+            if(bufferCycles < 10)
+            {
+                bufferCycles++;
+            }
+            else
+            {
+                //float* leftChannelLevel = (float*)inBufferListPtr->mBuffers[sampleOffsetToNextBeat-1].mData;
+                
+                //setParameter(LEVEL_PARAMETER_ADDRESS, bufferCycles*valueIncrement); //*leftChannelLevel];
+                
+                if(valueIncrement < 10)
+                {
+                    valueIncrement++;
+                }
+                else
+                {
+                    valueIncrement = 0;
+                }
+                
+                bufferCycles = 0;
+            }
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////
@@ -122,6 +190,13 @@ public:
 private:
     float sampleRate = 44100.0;
     int qtyChannels = 2;
+    int bufferCycles = 0;
+    int valueIncrement = 0;
+    
+    double currentTempo = 120.0;
+    double currentBeatPosition = 0.0;
+    NSInteger sampleOffsetToNextBeat = 0;
+    double currentMeasureDownbeatPosition = 0.0;
     
     AudioBufferList* inBufferListPtr = nullptr;
     AudioBufferList* outBufferListPtr = nullptr;

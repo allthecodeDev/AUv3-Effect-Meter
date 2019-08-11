@@ -182,6 +182,13 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
     __block MeterDSPKernel *state = &_kernel;
     __block BufferedInputBus *input = &_inputBus;
     
+    __block AUParameterTree *tree = _parameterTree;
+    
+  //https://developer.apple.com/documentation/audiotoolbox/auhostmusicalcontextblock?language=objc
+    __block AUHostMusicalContextBlock _musicalContextCapture = self.musicalContextBlock;
+    
+    ///////////
+    
     return ^AUAudioUnitStatus(AudioUnitRenderActionFlags *actionFlags,
                               const AudioTimeStamp *timestamp,
                               AVAudioFrameCount frameCount,
@@ -206,6 +213,44 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
                 outAudioBufferList->mBuffers[i].mData = inAudioBufferList->mBuffers[i].mData;
             }
         //}
+        
+        ///////////
+        
+        //https://www.rockhoppertech.com/blog/audio-units-auv3-midi-extension-part-2-c/
+        double currentTempo = 120.0;
+        double currentBeatPosition = 0.0;
+        NSInteger sampleOffsetToNextBeat = 0;
+        double currentMeasureDownbeatPosition = 0.0;
+        
+        if ( _musicalContextCapture ) {
+            double timeSignatureNumerator;
+            NSInteger timeSignatureDenominator;
+            
+            if (_musicalContextCapture( &currentTempo, &timeSignatureNumerator, &timeSignatureDenominator, &currentBeatPosition, &sampleOffsetToNextBeat, &currentMeasureDownbeatPosition ) ) {
+                
+                //NSLog(@"beat position = %f",currentBeatPosition);
+                //NSLog(@"offset to next beat = %ld",(long)sampleOffsetToNextBeat);
+                //NSLog(@"downbeat position = %f",currentMeasureDownbeatPosition);
+                
+                state->setTempo(currentTempo);
+                state->setCurrentBeatPosition(currentBeatPosition);
+                state->setSampleOffsetToNextBeat(sampleOffsetToNextBeat);
+                state->setCurrentMeasureDownbeatPosition(currentMeasureDownbeatPosition);
+            }
+        }
+            
+        ///////////
+        
+        /*
+        for(int n = 0; n<1024; n++){
+            
+            for(int i = 0; i<100; i++){
+                [tree setValue:[NSNumber numberWithInt:i] forKey:@"level"];
+            }
+        }
+         */
+        
+        ///////////
         
         state->setBuffers(inAudioBufferList, outAudioBufferList);
         state->processWithEvents(timestamp, frameCount, realtimeEventListHead);

@@ -16,6 +16,8 @@
 #import <memory>
 #import <cstring>
 
+@class AUAudioUnitBus;
+
 ///////////////////////////////////////////////////////////////////////
 
 enum{
@@ -44,6 +46,8 @@ public:
     void init(AUv3_Effect_Meter_AppexAudioUnit* unit) {
         
         audioUnit = unit;
+        levelParameter = [audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER];
+        //
         sampleRate =  audioUnit.outputBusses[0].format.sampleRate;
         qtyChannels = audioUnit.outputBusses[0].format.channelCount;
     }
@@ -72,8 +76,8 @@ public:
         switch (address) {
             case LEVEL_PARAMETER:
                 levelValue = value;
-                [audioUnit.parameterTree.children[LEVEL_PARAMETER] setValue:[NSNumber numberWithFloat:value] forKey:@"level"];
-                //[[audioUnit.parameterTree parameterWithAddress: address] setValue:value];
+                //[levelParameter setValue:[NSNumber numberWithFloat:value] forKey:@"level"];
+
                 break;
         }
     }
@@ -100,57 +104,6 @@ public:
     
     void process(AUAudioFrameCount frameCount, AUAudioFrameCount bufferOffset){
         
-        /*
-        double tempoValue = 1.0;
-        double* tempo = &tempoValue;
-        
-        double timeSigNumeratorValue = 4.0;
-        double* timeSigNumerator = &timeSigNumeratorValue;
-        
-        NSInteger timeSigDenominatorValue = 4.0;
-        NSInteger* timeSigDenominator = &timeSigDenominatorValue;
-        
-        double currentPositionValue = 0.0;
-        double* currentPosition = &currentPositionValue;
-        
-        NSInteger offsetToNextBeatValue = 0;
-        NSInteger* offsetToNextBeat = &offsetToNextBeatValue;
-        
-        double currentDownbeatPositionValue = 0.0;
-        double* currentDownbeatPosition = &currentDownbeatPositionValue;
-    //https://developer.apple.com/documentation/audiotoolbox/auhostmusicalcontextblock?language=objc
-        
-        audioUnit.musicalContextBlock = ^BOOL(double * _Nullable currentTempo,
-                                              double * _Nullable timeSignatureNumerator,
-                                              NSInteger * _Nullable timeSignatureDenominator,
-                                              double * _Nullable currentBeatPosition,
-                                              NSInteger * _Nullable sampleOffsetToNextBeat,
-                                              double * _Nullable currentMeasureDownbeatPosition) {
-            
-            //TODO: get downbeat position and provide set level parameter value on downbeat only
-            if(*sampleOffsetToNextBeat < frameCount){
-                
-                float* leftChannelLevel = (float*)inBufferListPtr->mBuffers[*sampleOffsetToNextBeat].mData;
-                
-                [[audioUnit.parameterTree parameterWithAddress: LEVEL_PARAMETER_ADDRESS] setValue: *leftChannelLevel];
-            }
-            
-            if(currentTempo){
-                return YES;
-            }
-            else{
-                return NO;
-            }
-        };
-        
-        audioUnit.musicalContextBlock(tempo,
-                                      timeSigNumerator,
-                                      timeSigDenominator,
-                                      currentPosition,
-                                      offsetToNextBeat,
-                                      currentDownbeatPosition);
-         */
-        
         if(sampleOffsetToNextBeat < frameCount){
             
             if(bufferCycles < 10)
@@ -171,6 +124,8 @@ public:
                 {
                     valueIncrement = 0;
                 }
+                levelValue = valueIncrement*10;
+                levelParameter.value = levelValue;
                 
                 bufferCycles = 0;
             }
@@ -203,6 +158,7 @@ private:
     
     AUValue levelValue = 0.0;
     AUv3_Effect_Meter_AppexAudioUnit* audioUnit;
+    AUParameter* levelParameter;
 };
 
 #endif /* MeterDSPKernel_h */

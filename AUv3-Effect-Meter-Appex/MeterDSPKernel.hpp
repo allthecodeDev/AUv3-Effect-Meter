@@ -47,6 +47,7 @@ public:
         
         audioUnit = unit;
         levelParameter = [audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER];
+        scheduleBlock = audioUnit.scheduleParameterBlock;
         //
         sampleRate =  audioUnit.outputBusses[0].format.sampleRate;
         qtyChannels = audioUnit.outputBusses[0].format.channelCount;
@@ -69,6 +70,12 @@ public:
     
     void setCurrentMeasureDownbeatPosition(double downbeatPosition){
         currentMeasureDownbeatPosition = downbeatPosition;
+    }
+    
+    ///////////////////////////////////////////////////////////////////////
+    
+    void setTransportState(NSUInteger transportState){
+        transportStatus = transportState;
     }
     
     ///////////////////////////////////////////////////////////////////////
@@ -107,22 +114,40 @@ public:
     void process(AUAudioFrameCount frameCount, AUAudioFrameCount bufferOffset){
         
         /*
-        if(sampleOffsetToNextBeat < frameCount){
+        if( (sampleOffsetToNextBeat < frameCount) &&
+            (AUHostTransportStateMoving == transportStatus) ){
          
             leftChannelLevelPtr = (float*)inBufferListPtr->mBuffers[0].mData + bufferDataSize*sampleOffsetToNextBeat;
             
             levelValue = *leftChannelLevelPtr;
             
-            levelParameter.value = levelValue;
+            scheduleBlock(AUEventSampleTimeImmediate + sampleOffsetToNextBeat,
+                          256,
+                          LEVEL_PARAMETER,
+                          levelValue);
          
         }
-        */
+         */
         
-        leftChannelLevelPtr = (float*)inBufferListPtr->mBuffers[0].mData;
-        
-        levelValue = *leftChannelLevelPtr;
-        
-        levelParameter.value = levelValue;
+        if(meterWaitCycleQty < 2)
+        {
+            meterWaitCycleQty++;
+        }
+        else
+        {
+            meterWaitCycleQty = 0;
+            //
+            if(AUHostTransportStateMoving == transportStatus){
+                leftChannelLevelPtr = (float*)inBufferListPtr->mBuffers[0].mData;
+                
+                levelValue = *leftChannelLevelPtr;
+                
+                scheduleBlock(AUEventSampleTimeImmediate,
+                              256,
+                              LEVEL_PARAMETER,
+                              levelValue);
+            }
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////
@@ -144,6 +169,8 @@ private:
     NSInteger sampleOffsetToNextBeat = 0;
     double currentMeasureDownbeatPosition = 0.0;
     
+    NSUInteger transportStatus = 0;
+    
     int bufferDataSize = 0;
     int bufferQtyChannels = 0;
     
@@ -155,6 +182,10 @@ private:
     AUValue levelValue = 0.0;
     AUv3_Effect_Meter_AppexAudioUnit* audioUnit;
     AUParameter* levelParameter;
+    
+    AUScheduleParameterBlock scheduleBlock;
+    
+    int meterWaitCycleQty = 0;
 };
 
 #endif /* MeterDSPKernel_h */

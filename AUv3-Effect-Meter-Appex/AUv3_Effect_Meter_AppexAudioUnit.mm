@@ -188,6 +188,8 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
     //__block AUParameterTree *tree = _parameterTree;
   //https://developer.apple.com/documentation/audiotoolbox/auhostmusicalcontextblock?language=objc
     __block AUHostMusicalContextBlock _musicalContextCapture = self.musicalContextBlock;
+    __block AUHostTransportStateBlock _transportStateCapture = self.transportStateBlock;
+    //__block AUScheduleParameterBlock _scheduleParameterCapture = self.scheduleParameterBlock;
     
     ///////////
     
@@ -227,7 +229,12 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
             double timeSignatureNumerator;
             NSInteger timeSignatureDenominator;
             
-            if (_musicalContextCapture( &currentTempo, &timeSignatureNumerator, &timeSignatureDenominator, &currentBeatPosition, &sampleOffsetToNextBeat, &currentMeasureDownbeatPosition ) ) {
+            if (_musicalContextCapture( &currentTempo,
+                                       &timeSignatureNumerator,
+                                       &timeSignatureDenominator,
+                                       &currentBeatPosition,
+                                       &sampleOffsetToNextBeat,
+                                       &currentMeasureDownbeatPosition ) ) {
                 
                 //NSLog(@"beat position = %f",currentBeatPosition);
                 //NSLog(@"offset to next beat = %ld",(long)sampleOffsetToNextBeat);
@@ -237,6 +244,24 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
                 state->setCurrentBeatPosition(currentBeatPosition);
                 state->setSampleOffsetToNextBeat(sampleOffsetToNextBeat);
                 state->setCurrentMeasureDownbeatPosition(currentMeasureDownbeatPosition);
+            }
+        }
+        
+        ///////////
+        
+        NSUInteger transportStateFlags = 0;
+        
+        if(_transportStateCapture) {
+            double currentSamplePosition;
+            double cycleStartBeatPosition;
+            double cycleEndBeatPosition;
+            
+            if(_transportStateCapture(&transportStateFlags,
+                                      &currentSamplePosition,
+                                      &cycleStartBeatPosition,
+                                      &cycleEndBeatPosition ) ){
+                
+                state->setTransportState(transportStateFlags);
             }
         }
         

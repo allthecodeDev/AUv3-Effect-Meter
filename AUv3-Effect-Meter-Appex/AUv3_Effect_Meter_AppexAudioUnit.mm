@@ -37,6 +37,7 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
     // C++ members need to be ivars; they would be copied on access if they were properties.
     MeterDSPKernel  _kernel;
     BufferedInputBus _inputBus;
+    UInt32 _dataByteSize;
 }
 
 @synthesize parameterTree = _parameterTree;
@@ -57,9 +58,9 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
     AUParameter *levelParameter = [AUParameterTree createParameterWithIdentifier:@"level"
                                                                             name:@"Level"
                                                                          address:LEVEL_PARAMETER_ADDRESS
-                                                                             min:0
-                                                                             max:100
-                                                                            unit:kAudioUnitParameterUnit_Percent
+                                                                             min:-1
+                                                                             max:1
+                                                                            unit:kAudioUnitParameterUnit_LinearGain
                                                                         unitName:nil
                                                                            flags:0
                                                                     valueStrings:nil
@@ -156,7 +157,9 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
     
     _inputBus.allocateRenderResources(self.maximumFramesToRender);
     
-    _kernel.init(self);
+    _dataByteSize = _inputBus.mutableAudioBufferList->mBuffers->mDataByteSize;
+    
+    _kernel.init(self, _dataByteSize);
     
     return YES;
 }
@@ -182,8 +185,7 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
     __block MeterDSPKernel *state = &_kernel;
     __block BufferedInputBus *input = &_inputBus;
     
-    __block AUParameterTree *tree = _parameterTree;
-    
+    //__block AUParameterTree *tree = _parameterTree;
   //https://developer.apple.com/documentation/audiotoolbox/auhostmusicalcontextblock?language=objc
     __block AUHostMusicalContextBlock _musicalContextCapture = self.musicalContextBlock;
     
@@ -208,11 +210,10 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
         
         // If passed null output buffer pointers, process in-place in the input buffer.
         AudioBufferList *outAudioBufferList = outputData;
-       // if (outAudioBufferList->mBuffers[0].mData == nullptr) {
-            for (UInt32 i = 0; i < outAudioBufferList->mNumberBuffers; ++i) {
-                outAudioBufferList->mBuffers[i].mData = inAudioBufferList->mBuffers[i].mData;
-            }
-        //}
+       
+        for (UInt32 i = 0; i < outAudioBufferList->mNumberBuffers; ++i) {
+            outAudioBufferList->mBuffers[i].mData = inAudioBufferList->mBuffers[i].mData;
+        }
         
         ///////////
         
@@ -238,17 +239,6 @@ const AUParameterAddress LEVEL_PARAMETER_ADDRESS = 0;
                 state->setCurrentMeasureDownbeatPosition(currentMeasureDownbeatPosition);
             }
         }
-            
-        ///////////
-        
-        /*
-        for(int n = 0; n<1024; n++){
-            
-            for(int i = 0; i<100; i++){
-                [tree setValue:[NSNumber numberWithInt:i] forKey:@"level"];
-            }
-        }
-         */
         
         ///////////
         

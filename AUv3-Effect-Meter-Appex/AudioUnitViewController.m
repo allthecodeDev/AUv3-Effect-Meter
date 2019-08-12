@@ -70,102 +70,43 @@
                 self->_level = value; //self->_levelParameter.value;
                 NSLog(@"level = %f ",self->_level);
                 
-                self->volumeLabel.stringValue = [NSString stringWithFormat:@"%0.02f",self->_level];
+                self->volumeLabel.stringValue = [NSString stringWithFormat:@"%f",self->_level];
                 
                 self->volumeSlider.doubleValue = self->_level;
+                
+                if(self->_level < 0.002)
+                {
+                    self.view.layer.backgroundColor = NSColor.blueColor.CGColor;
+                }
+                else if(self->_level < 0.004)
+                {
+                    self.view.layer.backgroundColor = NSColor.greenColor.CGColor;
+                }
+                else if(self->_level < 0.0075)
+                {
+                    self.view.layer.backgroundColor = NSColor.yellowColor.CGColor;
+                }
+                else if(self->_level < 0.01)
+                {
+                    self.view.layer.backgroundColor = NSColor.orangeColor.CGColor;
+                }
+                else
+                {
+                    self.view.layer.backgroundColor = NSColor.redColor.CGColor;
+                }
             }
-            
-            
-            /*
-            if(self->_level < 0.25)
-            {
-                self.view.layer.backgroundColor = NSColor.blueColor.CGColor;
-            }
-            else if(self->_level < 0.5)
-            {
-                self.view.layer.backgroundColor = NSColor.greenColor.CGColor;
-            }
-            else if(self->_level < 0.75)
-            {
-                self.view.layer.backgroundColor = NSColor.yellowColor.CGColor;
-            }
-            else if(self->_level < 0.9)
-            {
-                self.view.layer.backgroundColor = NSColor.orangeColor.CGColor;
-            }
-            else
-            {
-                self.view.layer.backgroundColor = NSColor.redColor.CGColor;
-            }
-             */
         });
     }];
-    
-    /*
-    [_levelParameter addObserver:self
-                      forKeyPath:@"level"
-                         options:NSKeyValueObservingOptionNew
-                         context:_parameterObserverToken];
-     */
     
     return audioUnit;
 }
 
 ///////////////////////////////////////////////////////////////////////
-/*
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary<NSString *, id> *)change
-                       context:(void *)context
-{
-    if([keyPath  isEqual: @"level"]){
-        //
-        self->_level = self->_levelParameter.value;
-        NSLog(@"level = %f ",self->_level);
-        
-        self->volumeLabel.stringValue = [NSString stringWithFormat:@"%0.02f",self->_level];
-        
-        self->volumeSlider.doubleValue = self->_level;
-    }
- 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        self->_level = [self->audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER_ADDRESS].value;
-        NSLog(@"level = %f ",self->_level);
-        
-        self->volumeLabel.stringValue = [NSString stringWithFormat:@"%0.02f",self->_level];
-        
-        if(self->_level < 0.25)
-        {
-            self.view.layer.backgroundColor = NSColor.blueColor.CGColor;
-        }
-        else if(self->_level < 0.5)
-        {
-            self.view.layer.backgroundColor = NSColor.greenColor.CGColor;
-        }
-        else if(self->_level < 0.75)
-        {
-            self.view.layer.backgroundColor = NSColor.yellowColor.CGColor;
-        }
-        else if(self->_level < 0.9)
-        {
-            self.view.layer.backgroundColor = NSColor.orangeColor.CGColor;
-        }
-        else
-        {
-            self.view.layer.backgroundColor = NSColor.redColor.CGColor;
-        }
-    });
-}
-*/
-
-///////////////////////////////////////////////////////////////////////
 
 - (IBAction)volumeSliderDidChange:(NSSlider *)sender {
     
-    _level = sender.doubleValue;
-    //[_levelParameter setValue:_level originator:_parameterObserverToken];
-    _levelParameter.value = _level;
+    //_level = sender.doubleValue;
+    _levelParameter.value = sender.doubleValue;
 }
 
 ///////////////////////////////////////////////////////////////////////

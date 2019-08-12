@@ -43,13 +43,14 @@ public:
     
     ///////////////////////////////////////////////////////////////////////
     
-    void init(AUv3_Effect_Meter_AppexAudioUnit* unit) {
+    void init(AUv3_Effect_Meter_AppexAudioUnit* unit, UInt32 byteSize) {
         
         audioUnit = unit;
         levelParameter = [audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER];
         //
         sampleRate =  audioUnit.outputBusses[0].format.sampleRate;
         qtyChannels = audioUnit.outputBusses[0].format.channelCount;
+        bufferDataSize = byteSize;
     }
     
     ///////////////////////////////////////////////////////////////////////
@@ -95,7 +96,8 @@ public:
     
     ///////////////////////////////////////////////////////////////////////
     
-    void setBuffers(AudioBufferList* inBufferList, AudioBufferList* outBufferList) {
+    void setBuffers(AudioBufferList* inBufferList,
+                    AudioBufferList* outBufferList) {
          inBufferListPtr = inBufferList;
         outBufferListPtr = outBufferList;
     }
@@ -104,32 +106,23 @@ public:
     
     void process(AUAudioFrameCount frameCount, AUAudioFrameCount bufferOffset){
         
+        /*
         if(sampleOffsetToNextBeat < frameCount){
+         
+            leftChannelLevelPtr = (float*)inBufferListPtr->mBuffers[0].mData + bufferDataSize*sampleOffsetToNextBeat;
             
-            if(bufferCycles < 10)
-            {
-                bufferCycles++;
-            }
-            else
-            {
-                //float* leftChannelLevel = (float*)inBufferListPtr->mBuffers[sampleOffsetToNextBeat-1].mData;
-                
-                //setParameter(LEVEL_PARAMETER_ADDRESS, bufferCycles*valueIncrement); //*leftChannelLevel];
-                
-                if(valueIncrement < 10)
-                {
-                    valueIncrement++;
-                }
-                else
-                {
-                    valueIncrement = 0;
-                }
-                levelValue = valueIncrement*10;
-                levelParameter.value = levelValue;
-                
-                bufferCycles = 0;
-            }
+            levelValue = *leftChannelLevelPtr;
+            
+            levelParameter.value = levelValue;
+         
         }
+        */
+        
+        leftChannelLevelPtr = (float*)inBufferListPtr->mBuffers[0].mData;
+        
+        levelValue = *leftChannelLevelPtr;
+        
+        levelParameter.value = levelValue;
     }
     
     ///////////////////////////////////////////////////////////////////////
@@ -145,16 +138,19 @@ public:
 private:
     float sampleRate = 44100.0;
     int qtyChannels = 2;
-    int bufferCycles = 0;
-    int valueIncrement = 0;
     
     double currentTempo = 120.0;
     double currentBeatPosition = 0.0;
     NSInteger sampleOffsetToNextBeat = 0;
     double currentMeasureDownbeatPosition = 0.0;
     
+    int bufferDataSize = 0;
+    int bufferQtyChannels = 0;
+    
     AudioBufferList* inBufferListPtr = nullptr;
     AudioBufferList* outBufferListPtr = nullptr;
+    
+    float* leftChannelLevelPtr;
     
     AUValue levelValue = 0.0;
     AUv3_Effect_Meter_AppexAudioUnit* audioUnit;

@@ -20,14 +20,14 @@
             <subviews>
                 <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rH8-Di-Xnd">
                     <rect key="frame" x="18" y="126" width="444" height="19"/>
-                    <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="Vrb-lZ-Tei"/>
+                    <sliderCell key="cell" state="on" alignment="left" minValue="-0.0025000000000000001" maxValue="0.014999999999999999" doubleValue="0.014999999999999999" tickMarkPosition="above" sliderType="linear" id="Vrb-lZ-Tei"/>
                     <connections>
                         <action selector="volumeSliderDidChange:" target="-2" id="nek-sZ-YtT"/>
                     </connections>
                 </slider>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WxL-45-hgt">
-                    <rect key="frame" x="222" y="163" width="37" height="17"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="kng-tg-yYa">
+                    <rect key="frame" x="222" y="163" width="36" height="17"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Level" id="kng-tg-yYa">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

@@ -74,19 +74,19 @@
                 
                 self->volumeSlider.doubleValue = self->_level;
                 
-                if(self->_level < 0.002)
+                if(self->_level < 0.005)
                 {
                     self.view.layer.backgroundColor = NSColor.blueColor.CGColor;
                 }
-                else if(self->_level < 0.004)
+                else if(self->_level < 0.05)
                 {
                     self.view.layer.backgroundColor = NSColor.greenColor.CGColor;
                 }
-                else if(self->_level < 0.0075)
+                else if(self->_level < 0.1)
                 {
                     self.view.layer.backgroundColor = NSColor.yellowColor.CGColor;
                 }
-                else if(self->_level < 0.01)
+                else if(self->_level < 0.15)
                 {
                     self.view.layer.backgroundColor = NSColor.orangeColor.CGColor;
                 }

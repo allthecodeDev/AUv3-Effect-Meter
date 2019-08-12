@@ -20,7 +20,7 @@
             <subviews>
                 <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rH8-Di-Xnd">
                     <rect key="frame" x="18" y="126" width="444" height="19"/>
-                    <sliderCell key="cell" state="on" alignment="left" minValue="-0.0025000000000000001" maxValue="0.014999999999999999" doubleValue="0.014999999999999999" tickMarkPosition="above" sliderType="linear" id="Vrb-lZ-Tei"/>
+                    <sliderCell key="cell" state="on" alignment="left" minValue="-0.0025000000000000001" maxValue="0.20000000000000001" doubleValue="0.014999999999999999" tickMarkPosition="above" sliderType="linear" id="Vrb-lZ-Tei"/>
                     <connections>
                         <action selector="volumeSliderDidChange:" target="-2" id="nek-sZ-YtT"/>
                     </connections>

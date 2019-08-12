@@ -45,37 +45,39 @@ public:
     
     void init(AUv3_Effect_Meter_AppexAudioUnit* unit, UInt32 byteSize) {
         
-        audioUnit = unit;
-        levelParameter = [audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER];
-        scheduleBlock = audioUnit.scheduleParameterBlock;
+        _audioUnit = unit;
+        _levelParameter = [_audioUnit.parameterTree parameterWithAddress:LEVEL_PARAMETER];
         //
-        sampleRate =  audioUnit.outputBusses[0].format.sampleRate;
-        qtyChannels = audioUnit.outputBusses[0].format.channelCount;
-        bufferDataSize = byteSize;
+        _parameterScheduleBlock = _audioUnit.scheduleParameterBlock;
+        _midiEventScheduleBlock = _audioUnit.scheduleMIDIEventBlock;
+        //
+        _sampleRate =  _audioUnit.outputBusses[0].format.sampleRate;
+        _qtyChannels = _audioUnit.outputBusses[0].format.channelCount;
+        _bufferDataSize = byteSize;
     }
     
     ///////////////////////////////////////////////////////////////////////
     
     void setTempo(double tempo){
-        currentTempo = tempo;
+        _currentTempo = tempo;
     }
     
     void setCurrentBeatPosition(double beatPosition){
-        currentBeatPosition = beatPosition;
+        _currentBeatPosition = beatPosition;
     }
     
     void setSampleOffsetToNextBeat(NSInteger offsetToNextBeatPosition){
-        sampleOffsetToNextBeat = offsetToNextBeatPosition;
+        _sampleOffsetToNextBeat = offsetToNextBeatPosition;
     }
     
     void setCurrentMeasureDownbeatPosition(double downbeatPosition){
-        currentMeasureDownbeatPosition = downbeatPosition;
+        _currentMeasureDownbeatPosition = downbeatPosition;
     }
     
     ///////////////////////////////////////////////////////////////////////
     
     void setTransportState(NSUInteger transportState){
-        transportStatus = transportState;
+        _transportStatus = transportState;
     }
     
     ///////////////////////////////////////////////////////////////////////
@@ -83,7 +85,7 @@ public:
     void setParameter(AUParameterAddress address, AUValue value) {
         switch (address) {
             case LEVEL_PARAMETER:
-                levelValue = value;
+                _levelValue = value;
                 //[levelParameter setValue:[NSNumber numberWithFloat:value] forKey:@"level"];
 
                 break;
@@ -96,7 +98,7 @@ public:
         switch (address) {
             case LEVEL_PARAMETER:
                 // Return the goal. It is not thread safe to return the ramping value.
-                return levelValue;
+                return _levelValue;
         }
         return 0.0;
     }
@@ -105,8 +107,8 @@ public:
     
     void setBuffers(AudioBufferList* inBufferList,
                     AudioBufferList* outBufferList) {
-         inBufferListPtr = inBufferList;
-        outBufferListPtr = outBufferList;
+         _inBufferListPtr = inBufferList;
+        _outBufferListPtr = outBufferList;
     }
     
     ///////////////////////////////////////////////////////////////////////
@@ -129,7 +131,8 @@ public:
         }
          */
         
-        if(meterWaitCycleQty < 2)
+        /*
+        if(meterWaitCycleQty < 1)
         {
             meterWaitCycleQty++;
         }
@@ -143,10 +146,42 @@ public:
                 levelValue = *leftChannelLevelPtr;
                 
                 scheduleBlock(AUEventSampleTimeImmediate,
-                              256,
+                              0,
                               LEVEL_PARAMETER,
                               levelValue);
             }
+        }
+         */
+        
+        if(AUHostTransportStateMoving == _transportStatus){
+            _leftChannelLevelPtr = (float*)_inBufferListPtr->mBuffers[0].mData;
+            
+            _levelValue = *_leftChannelLevelPtr;
+            
+            _parameterScheduleBlock(AUEventSampleTimeImmediate,
+                          0,
+                          LEVEL_PARAMETER,
+                          _levelValue);
+            
+            ////////////////
+            
+            _leftChannelLevelPtr = _leftChannelLevelPtr + (_bufferDataSize*frameCount/2);
+            
+            _levelValue = *_leftChannelLevelPtr;
+            
+            _parameterScheduleBlock(AUEventSampleTimeImmediate + (frameCount/2),
+                                    0,
+                                    LEVEL_PARAMETER,
+                                    _levelValue);
+            
+            /*
+            const uint8_t midiBytes[] = {(uint8_t)0xFF,(uint8_t)0xFF};
+            
+            _midiEventScheduleBlock(AUEventSampleTimeImmediate,
+                                    0, //uint8_t cable,
+                                    1, //NSInteger length,
+                                    midiBytes); //const uint8_t *midiBytes
+             */
         }
     }
     
@@ -161,31 +196,32 @@ public:
     ///////////////////////////////////////////////////////////////////////
     
 private:
-    float sampleRate = 44100.0;
-    int qtyChannels = 2;
+    float _sampleRate = 44100.0;
+    int _qtyChannels = 2;
     
-    double currentTempo = 120.0;
-    double currentBeatPosition = 0.0;
-    NSInteger sampleOffsetToNextBeat = 0;
-    double currentMeasureDownbeatPosition = 0.0;
+    double _currentTempo = 120.0;
+    double _currentBeatPosition = 0.0;
+    NSInteger _sampleOffsetToNextBeat = 0;
+    double _currentMeasureDownbeatPosition = 0.0;
     
-    NSUInteger transportStatus = 0;
+    NSUInteger _transportStatus = 0;
     
-    int bufferDataSize = 0;
-    int bufferQtyChannels = 0;
+    int _bufferDataSize = 0;
+    int _bufferQtyChannels = 0;
     
-    AudioBufferList* inBufferListPtr = nullptr;
-    AudioBufferList* outBufferListPtr = nullptr;
+    AudioBufferList* _inBufferListPtr = nullptr;
+    AudioBufferList* _outBufferListPtr = nullptr;
     
-    float* leftChannelLevelPtr;
+    float* _leftChannelLevelPtr;
     
-    AUValue levelValue = 0.0;
-    AUv3_Effect_Meter_AppexAudioUnit* audioUnit;
-    AUParameter* levelParameter;
+    AUValue _levelValue = 0.0;
+    AUv3_Effect_Meter_AppexAudioUnit* _audioUnit;
+    AUParameter* _levelParameter;
     
-    AUScheduleParameterBlock scheduleBlock;
+    AUScheduleParameterBlock _parameterScheduleBlock;
+    AUScheduleMIDIEventBlock _midiEventScheduleBlock;
     
-    int meterWaitCycleQty = 0;
+    int _meterWaitCycleQty = 0;
 };
 
 #endif /* MeterDSPKernel_h */

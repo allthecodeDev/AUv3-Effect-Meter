@@ -154,25 +154,18 @@ public:
          */
         
         if(AUHostTransportStateMoving == _transportStatus){
-            _leftChannelLevelPtr = (float*)_inBufferListPtr->mBuffers[0].mData;
             
-            _levelValue = *_leftChannelLevelPtr;
-            
-            _parameterScheduleBlock(AUEventSampleTimeImmediate,
-                          0,
-                          LEVEL_PARAMETER,
-                          _levelValue);
-            
-            ////////////////
-            
-            _leftChannelLevelPtr = _leftChannelLevelPtr + (_bufferDataSize*frameCount/2);
-            
-            _levelValue = *_leftChannelLevelPtr;
-            
-            _parameterScheduleBlock(AUEventSampleTimeImmediate + (frameCount/2),
-                                    0,
-                                    LEVEL_PARAMETER,
-                                    _levelValue);
+            for(int i = 0; i < 64; i++){
+                
+                _leftChannelLevelPtr = (float*)_inBufferListPtr->mBuffers[0].mData + (_bufferDataSize * i * 16);
+                
+                _levelValue = *_leftChannelLevelPtr;
+                
+                _parameterScheduleBlock(AUEventSampleTimeImmediate + (i * 16),
+                                        0,
+                                        LEVEL_PARAMETER,
+                                        _levelValue);
+            }
             
             /*
             const uint8_t midiBytes[] = {(uint8_t)0xFF,(uint8_t)0xFF};

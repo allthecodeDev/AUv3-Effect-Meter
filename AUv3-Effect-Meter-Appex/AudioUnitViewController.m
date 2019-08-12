@@ -73,10 +73,12 @@
                 self->volumeLabel.stringValue = [NSString stringWithFormat:@"%f",self->_level];
                 
                 self->volumeSlider.doubleValue = self->_level;
-                
+
+                /*
                 if(self->_level < 0.005)
                 {
                     self.view.layer.backgroundColor = NSColor.blueColor.CGColor;
+                    
                 }
                 else if(self->_level < 0.05)
                 {
@@ -94,6 +96,12 @@
                 {
                     self.view.layer.backgroundColor = NSColor.redColor.CGColor;
                 }
+                 */
+                
+                self.view.layer.backgroundColor = [NSColor colorWithCalibratedRed:5*self->_level
+                                                                            green:2.5*self->_level
+                                                                             blue:10*self->_level
+                                                                            alpha:1].CGColor;
             }
         });
     }];

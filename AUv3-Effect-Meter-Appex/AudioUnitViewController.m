@@ -14,7 +14,8 @@
 @interface AudioUnitViewController (){
     
     AUParameter* _levelParameter;
-    AUValue _level;
+    AUValue _levelValueCurrent;
+    AUValue _levelValuePrevious;
     AUParameterObserverToken _parameterObserverToken;
     
     __weak IBOutlet NSTextField *volumeLabel;
@@ -67,12 +68,13 @@
             
             if(address == LEVEL_PARAMETER_ADDRESS){
                 
-                self->_level = value; //self->_levelParameter.value;
-                NSLog(@"level = %f ",self->_level);
+                self->_levelValuePrevious = self->_levelValueCurrent;
+                self->_levelValueCurrent = value; //self->_levelParameter.value;
+                NSLog(@"level = %f ",self->_levelValueCurrent);
                 
-                self->volumeLabel.stringValue = [NSString stringWithFormat:@"%f",self->_level];
+                self->volumeLabel.stringValue = [NSString stringWithFormat:@"%f",self->_levelValueCurrent];
                 
-                self->volumeSlider.doubleValue = self->_level;
+                self->volumeSlider.doubleValue = self->_levelValueCurrent;
 
                 /*
                 if(self->_level < 0.005)
@@ -97,11 +99,25 @@
                     self.view.layer.backgroundColor = NSColor.redColor.CGColor;
                 }
                  */
+                if(self->_levelValuePrevious >= self->_levelValueCurrent){
+                    /*
+                    self.view.layer.backgroundColor = [NSColor colorWithCalibratedRed:0
+                                                                            green:25*self->_levelValueCurrent
+                                                                                 blue:0
+                                                                                alpha:1].CGColor;
+                     */
+                    self.view.layer.backgroundColor = NSColor.greenColor.CGColor;
+                }
+                else{
+                    /*
+                    self.view.layer.backgroundColor = [NSColor colorWithCalibratedRed:0.0
+                                                                                green:0.0
+                                                                                 blue:0.0
+                                                                                alpha:1].CGColor;
+                     */
+                    self.view.layer.backgroundColor = NSColor.blackColor.CGColor;
+                }
                 
-                self.view.layer.backgroundColor = [NSColor colorWithCalibratedRed:5*self->_level
-                                                                            green:2.5*self->_level
-                                                                             blue:10*self->_level
-                                                                            alpha:1].CGColor;
             }
         });
     }];

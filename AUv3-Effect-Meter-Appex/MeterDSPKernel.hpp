@@ -155,9 +155,10 @@ public:
         
         if(AUHostTransportStateMoving == _transportStatus){
             
-            for(int i = 0; i < 64; i++){
+            AUAudioFrameCount renderCyclesPerBuffer = 1;
+            for(int i = 0; i < (frameCount/renderCyclesPerBuffer); i++){
                 
-                _leftChannelLevelPtr = (float*)_inBufferListPtr->mBuffers[0].mData + (_bufferDataSize * i * 16);
+                _leftChannelLevelPtr = (float*)_inBufferListPtr->mBuffers[0].mData + (_bufferDataSize * i * renderCyclesPerBuffer);
                 
                 _levelValue = *_leftChannelLevelPtr;
                 

@@ -85,7 +85,7 @@ public:
     void setParameter(AUParameterAddress address, AUValue value) {
         switch (address) {
             case LEVEL_PARAMETER:
-                _levelValue = value;
+                _levelValueCurrent = value;
                 //[levelParameter setValue:[NSNumber numberWithFloat:value] forKey:@"level"];
 
                 break;
@@ -98,7 +98,7 @@ public:
         switch (address) {
             case LEVEL_PARAMETER:
                 // Return the goal. It is not thread safe to return the ramping value.
-                return _levelValue;
+                return _levelValueCurrent;
         }
         return 0.0;
     }
@@ -155,6 +155,7 @@ public:
         
         if(AUHostTransportStateMoving == _transportStatus){
             
+            /*
             AUAudioFrameCount renderCyclesPerBuffer = 1;
             for(int i = 0; i < (frameCount/renderCyclesPerBuffer); i++){
                 
@@ -166,7 +167,23 @@ public:
                                         0,
                                         LEVEL_PARAMETER,
                                         _levelValue);
+             */
+            for(AUAudioFrameCount i = bufferOffset; i < frameCount; i = i + 16){
+                    
+                    _leftChannelLevelPtr = (float*)_inBufferListPtr->mBuffers[0].mData + (_bufferDataSize * i);
+                    
+                    //_levelValuePrevious = _levelValueCurrent;
+                    _levelValueCurrent = *_leftChannelLevelPtr;
+                    
+                    //if( _levelValueCurrent - _levelValuePrevious > 0.1){
+                        
+                        _parameterScheduleBlock(AUEventSampleTimeImmediate + i,
+                                                0,
+                                                LEVEL_PARAMETER,
+                                                _levelValueCurrent);
+                    //}
             }
+            
             
             /*
             const uint8_t midiBytes[] = {(uint8_t)0xFF,(uint8_t)0xFF};
@@ -208,7 +225,8 @@ private:
     
     float* _leftChannelLevelPtr;
     
-    AUValue _levelValue = 0.0;
+    AUValue _levelValueCurrent = 0.0;
+    AUValue _levelValuePrevious = 0.0;
     AUv3_Effect_Meter_AppexAudioUnit* _audioUnit;
     AUParameter* _levelParameter;
     

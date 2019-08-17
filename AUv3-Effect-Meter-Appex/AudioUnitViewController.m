@@ -69,7 +69,7 @@
             if(address == LEVEL_PARAMETER_ADDRESS){
                 
                 self->_levelValuePrevious = self->_levelValueCurrent;
-                self->_levelValueCurrent = value; //self->_levelParameter.value;
+                self->_levelValueCurrent = fabsf(value); //self->_levelParameter.value;
                 NSLog(@"level = %f ",self->_levelValueCurrent);
                 
                 self->volumeLabel.stringValue = [NSString stringWithFormat:@"%f",self->_levelValueCurrent];
@@ -99,24 +99,25 @@
                     self.view.layer.backgroundColor = NSColor.redColor.CGColor;
                 }
                  */
-                if(self->_levelValuePrevious >= self->_levelValueCurrent){
+                
+                //if(self->_levelValuePrevious < self->_levelValueCurrent){
                     /*
                     self.view.layer.backgroundColor = [NSColor colorWithCalibratedRed:0
                                                                             green:25*self->_levelValueCurrent
                                                                                  blue:0
                                                                                 alpha:1].CGColor;
                      */
-                    self.view.layer.backgroundColor = NSColor.greenColor.CGColor;
-                }
-                else{
+                    //self.view.layer.backgroundColor = NSColor.blackColor.CGColor;
+               // }
+                //else{
                     /*
                     self.view.layer.backgroundColor = [NSColor colorWithCalibratedRed:0.0
                                                                                 green:0.0
                                                                                  blue:0.0
                                                                                 alpha:1].CGColor;
                      */
-                    self.view.layer.backgroundColor = NSColor.blackColor.CGColor;
-                }
+                    //self.view.layer.backgroundColor = NSColor.greenColor.CGColor;
+                //}
                 
             }
         });
